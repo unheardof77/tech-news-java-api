@@ -128,4 +128,5 @@ public class User implements Serializable {
                 ", comments=" + comments +
                 '}';
     }
+
 }
