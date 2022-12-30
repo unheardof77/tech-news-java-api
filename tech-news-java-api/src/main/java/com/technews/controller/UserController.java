@@ -46,6 +46,7 @@ public class UserController {
     public User addUser(@RequestBody User user) {
         // Encrypt password
         user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
+
         repository.save(user);
         return user;
     }

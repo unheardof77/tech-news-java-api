@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class PostController {
@@ -24,7 +25,7 @@ public class PostController {
     @Autowired
     UserRepository userRepository;
 
-    @GetMapping("/api/post")
+    @GetMapping("/api/posts")
     public List<Post> getAllPost(){
         List<Post> postList = repository.findAll();
         for(Post p : postList){
@@ -35,9 +36,9 @@ public class PostController {
 
     @GetMapping("/api/posts/{id}")
     public Post getPost(@PathVariable Integer id){
-        Post returnPost = repository.getById(id);
-        returnPost.setVoteCount(voteRepository.countVotesByPostId(returnPost.getId()));
-        return returnPost;
+        Post singlePost = repository.getReferenceById(id);
+        singlePost.setVoteCount(voteRepository.countVotesByPostId(singlePost.getId()));
+        return singlePost;
     }
 
     @PostMapping("/api/posts")
@@ -47,7 +48,7 @@ public class PostController {
         return post;
     }
 
-    @PutMapping("/api/post/{id}")
+    @PutMapping("/api/posts/{id}")
     public Post updatePost(@PathVariable int id, @RequestBody Post post){
         Post tempPost = repository.getById(id);
         tempPost.setTitle(post.getTitle());
@@ -75,7 +76,7 @@ public class PostController {
         return returnValue;
     }
 
-    @PutMapping("/api/post/{id}")
+    @DeleteMapping("/api/posts/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePost(@PathVariable int id) {
         repository.deleteById(id);
